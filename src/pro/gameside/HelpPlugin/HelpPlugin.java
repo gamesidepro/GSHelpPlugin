@@ -19,7 +19,7 @@ import pro.gameside.Events.PlayerEventListener;
  */
 public class HelpPlugin extends JavaPlugin implements Listener {
     public static HashMap<String, Long> fg_cooldown = new HashMap();
-    private String host,database,table,user,pass;
+    public static String host,database,table,user,pass;
     private int port;
     public static Connection connection;
     
@@ -56,6 +56,9 @@ public class HelpPlugin extends JavaPlugin implements Listener {
             getConfig().addDefault("fungun.slot", 4);
             getConfig().addDefault("fungun.displayname", "§6§lПУШКА-ПЕРДУШКА");
             
+            
+            getConfig().addDefault("database.toggle", false);
+            getConfig().addDefault("database.servname", "lobby");
             getConfig().addDefault("database.host", "localhost");
             getConfig().addDefault("database.port", "3306");
             getConfig().addDefault("database.user", "root");

@@ -1,5 +1,8 @@
 package pro.gameside.Events;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.text.html.parser.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -30,6 +33,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import pro.gameside.HelpPlugin.HelpPlugin;
+import static pro.gameside.HelpPlugin.HelpPlugin.connection;
 import static pro.gameside.HelpPlugin.HelpPlugin.fg_cooldown;
 
 /**
@@ -121,7 +125,7 @@ public class PlayerEventListener implements Listener {
         }
         
 	@EventHandler
-	public void onJoin(PlayerJoinEvent event) {
+	public void onJoin(PlayerJoinEvent event) throws SQLException {
             Player player = event.getPlayer();
             if(config.getConfig().getBoolean("gameplay.alwaysday.toggle")==true){
             String alwaysdayworlds[] = config.getConfig().getString("gameplay.alwaysday.worlds").replaceAll(" ", "").split(",");
@@ -161,6 +165,19 @@ public class PlayerEventListener implements Listener {
                 for(String world : creativeworlds){
                     if(player.getWorld().getName().equals(world)){
                         player.setFlying(true);
+                    }
+                }
+            }
+            
+            /* Pex handler  */
+            if(config.getConfig().getBoolean("database.toggle")==true){
+                if(connection!=null){
+                    Statement statement = connection.createStatement();
+                    String servname = config.getConfig().getString("database.servname");
+                    ResultSet result = statement.executeQuery("SELECT * FROM "+HelpPlugin.table+" WHERE servname = "+servname+";");
+                    while (result.next()) {
+                        String pex_command = result.getString("pex_query");
+                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), pex_command);
                     }
                 }
             }
