@@ -25,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import pro.gameside.HelpPlugin.HelpPlugin;
 import static pro.gameside.HelpPlugin.HelpPlugin.fg_cooldown;
 
@@ -72,6 +73,19 @@ public class PlayerEventListener implements Listener {
                 }
             }
         }
+        
+        @EventHandler
+        public void onHunger(FoodLevelChangeEvent event){
+            if(config.getConfig().getBoolean("gameplay.nohunger.toggle")==true){
+                String nohungerworlds[] = config.getConfig().getString("gameplay.nohunger.worlds").replaceAll(" ", "").split(",");
+                for(String world : nohungerworlds){
+                    if(event.getEntity().getWorld().getName().equals(world))
+                        event.setCancelled(true);
+                }
+            }
+        }
+        
+        
         
         @EventHandler 
         public void onRain(WeatherChangeEvent event) {
