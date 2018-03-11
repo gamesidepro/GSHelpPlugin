@@ -2,7 +2,13 @@ package pro.gameside.HelpPlugin;
 
 import com.sun.webkit.plugin.PluginManager;
 import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import pro.gameside.Events.PlayerEventListener;
@@ -13,6 +19,10 @@ import pro.gameside.Events.PlayerEventListener;
  */
 public class HelpPlugin extends JavaPlugin implements Listener {
     public static HashMap<String, Long> fg_cooldown = new HashMap();
+    private String host,database,table,user,pass;
+    private int port;
+    public static Connection connection;
+    
     @Override
     public void onEnable() {
         // Загрузка конфигурации / создание / инициализация бд
@@ -56,9 +66,40 @@ public class HelpPlugin extends JavaPlugin implements Listener {
             
             getConfig().options().copyDefaults(true);
             saveConfig();
-        }        
+        }
+        
+        /* Подключаемся к базе */
+        
+        this.host = getConfig().getString("database.host");
+        this.port = getConfig().getInt("database.port");
+        this.user = getConfig().getString("database.user");
+        this.pass = getConfig().getString("database.password");
+        this.database = getConfig().getString("database.database");
+        this.table = getConfig().getString("database.table");
+        
+        try {     
+            openConnection();   
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(HelpPlugin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         getLogger().info("[GSHelper] Плагин включен.");
         
+    }
+    public void openConnection() throws SQLException, ClassNotFoundException {
+        if (connection != null && !connection.isClosed()) {
+            return;
+        }
+
+        synchronized (this) {
+            if (connection != null && !connection.isClosed()) {
+                return;
+            }
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database, this.user, this.pass);
+        }
     }
     
     @Override
