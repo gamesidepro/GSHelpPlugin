@@ -1,0 +1,8 @@
+name: HelpPlugin
+main: pro.gameside.HelpPlugin.HelpPlugin
+version: 1.2
+authors:
+  - Twelvee
+description: This is fucking stupid useless description.
+softdepend: [ProtocolLib]
+load: POSTWORLD
