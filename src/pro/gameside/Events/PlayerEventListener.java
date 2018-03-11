@@ -4,6 +4,7 @@ import javax.swing.text.html.parser.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -21,11 +22,13 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import pro.gameside.HelpPlugin.HelpPlugin;
 import static pro.gameside.HelpPlugin.HelpPlugin.fg_cooldown;
 
@@ -69,6 +72,22 @@ public class PlayerEventListener implements Listener {
                     for(String world : noworldsspawn){
                         if(event.getEntity().getWorld().getName().equals(world))
                             event.setCancelled(true);
+                    }
+                }
+            }
+        }
+        
+        @EventHandler
+        public void onFallDamage(EntityDamageEvent e){
+            if(config.getConfig().getBoolean("gameplay.nofalldamage.toggle")==true){
+                String nofallworlds[] = config.getConfig().getString("gameplay.nofalldamage.worlds").replaceAll(" ", "").split(",");
+                for(String world : nofallworlds){
+                    if(e.getEntity().getWorld().getName().equals(world)){
+                        if(e.getEntity() instanceof Player){
+                            if(e.getCause() == DamageCause.FALL){
+                                e.setCancelled(true);
+                            }
+                        }       
                     }
                 }
             }
@@ -124,6 +143,24 @@ public class PlayerEventListener implements Listener {
                         gunmeta.setDisplayName(config.getConfig().getString("fungun.displayname"));
                         gun.setItemMeta(gunmeta);
                         player.getInventory().setItem(config.getConfig().getInt("fungun.slot"), gun);
+                    }
+                }
+            }
+            
+            if(config.getConfig().getBoolean("gameplay.creative.toggle")==true){
+                String creativeworlds[] = config.getConfig().getString("gameplay.creative.worlds").replaceAll(" ", "").split(",");
+                for(String world : creativeworlds){
+                    if(player.getWorld().getName().equals(world)){
+                        player.setGameMode(GameMode.CREATIVE);
+                    }
+                }
+            }
+            
+            if(config.getConfig().getBoolean("gameplay.fly.toggle")==true){
+                String creativeworlds[] = config.getConfig().getString("gameplay.fly.worlds").replaceAll(" ", "").split(",");
+                for(String world : creativeworlds){
+                    if(player.getWorld().getName().equals(world)){
+                        player.setFlying(true);
                     }
                 }
             }

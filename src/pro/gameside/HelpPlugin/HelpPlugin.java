@@ -32,6 +32,10 @@ public class HelpPlugin extends JavaPlugin implements Listener {
             getConfig().addDefault("gameplay.nohunger.worlds", "world,hotv");
             getConfig().addDefault("gameplay.nofalldamage.toggle", false);
             getConfig().addDefault("gameplay.nofalldamage.worlds", "world,hotv");
+            getConfig().addDefault("gameplay.creative.toggle", false);
+            getConfig().addDefault("gameplay.creative.worlds", "world,hotv");
+            getConfig().addDefault("gameplay.fly.toggle", false);
+            getConfig().addDefault("gameplay.fly.worlds", "world,hotv");
             getConfig().addDefault("gameplay.nomobs.monster", false);
             getConfig().addDefault("gameplay.nomobs.animal", false);
             getConfig().addDefault("gameplay.nomobs.worlds", "world,hotv");
