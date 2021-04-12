@@ -1,3 +1,4 @@
+# Unsupported, use for your own risk
 # GSHelp Plugin
 - SQL QUERY
 ``CREATE TABLE `minigames`.`pex_requires` ( `id` INT NOT NULL AUTO_INCREMENT , `servname` VARCHAR(255) NOT NULL , `pex_query` VARCHAR(255) NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;``
